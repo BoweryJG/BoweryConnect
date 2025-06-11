@@ -23,7 +23,14 @@
       "edgeToEdgeEnabled": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "static",
+      "name": "BoweryConnect",
+      "shortName": "BoweryConnect",
+      "description": "Professional networking for homeless individuals",
+      "backgroundColor": "#ffffff",
+      "themeColor": "#1E3A8A"
     }
   }
 }
