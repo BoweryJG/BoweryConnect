@@ -11,6 +11,7 @@
     "netlify:build": "expo export --platform web"
   },
   "dependencies": {
+    "@expo/metro-runtime": "~5.0.4",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-community/netinfo": "^11.4.1",
     "@react-native-voice/voice": "^3.2.4",
@@ -20,6 +21,9 @@
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.9.0",
     "expo": "~53.0.11",
+    "expo-constants": "^17.1.6",
+    "expo-linking": "^7.1.5",
+    "expo-router": "^5.1.0",
     "expo-status-bar": "~2.2.3",
     "react": "19.0.0",
     "react-dom": "^19.0.0",
@@ -32,8 +36,7 @@
     "react-native-screens": "^4.11.1",
     "react-native-vector-icons": "^10.2.0",
     "react-native-web": "^0.20.0",
-    "react-redux": "^9.2.0",
-    "@expo/metro-runtime": "~5.0.4"
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
