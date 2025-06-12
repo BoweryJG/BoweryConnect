@@ -47,7 +47,7 @@ export default function WelcomeScreen() {
 
         <TouchableOpacity
           style={styles.getStartedButton}
-          onPress={() => navigation.navigate('PhoneInput')}
+          onPress={() => navigation.navigate('Login')}
           activeOpacity={0.8}
         >
           <Text style={styles.getStartedText}>Get Started</Text>

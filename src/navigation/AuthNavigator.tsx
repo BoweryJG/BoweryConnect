@@ -2,8 +2,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AuthStackParamList } from './types';
 import WelcomeScreen from '../screens/auth/WelcomeScreen';
-import PhoneInputScreen from '../screens/auth/PhoneInputScreen';
-import OTPVerificationScreen from '../screens/auth/OTPVerificationScreen';
+import LoginScreen from '../screens/auth/LoginScreen';
+import RegisterScreen from '../screens/auth/RegisterScreen';
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
@@ -16,8 +16,8 @@ export default function AuthNavigator() {
       }}
     >
       <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      <Stack.Screen name="PhoneInput" component={PhoneInputScreen} />
-      <Stack.Screen name="OTPVerification" component={OTPVerificationScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
     </Stack.Navigator>
   );
 }

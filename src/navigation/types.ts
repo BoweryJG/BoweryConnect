@@ -10,8 +10,8 @@ export type RootStackParamList = {
 
 export type AuthStackParamList = {
   Welcome: undefined;
-  PhoneInput: undefined;
-  OTPVerification: { phoneNumber: string };
+  Login: undefined;
+  Register: undefined;
 };
 
 export type OnboardingStackParamList = {
@@ -60,6 +60,11 @@ export type AuthStackNavigationProp = StackNavigationProp<AuthStackParamList>;
 
 export type OnboardingStackNavigationProp = StackNavigationProp<OnboardingStackParamList>;
 
+export type MainStackNavigationProp = CompositeNavigationProp<
+  AuthStackNavigationProp,
+  RootStackNavigationProp
+>;
+
 export type MainTabNavigationProp = BottomTabNavigationProp<MainTabParamList>;
 
 export type JobsStackNavigationProp = CompositeNavigationProp<
@@ -78,6 +83,5 @@ export type ResourcesStackNavigationProp = CompositeNavigationProp<
 >;
 
 // Route prop types
-export type OTPVerificationRouteProp = RouteProp<AuthStackParamList, 'OTPVerification'>;
 export type JobDetailsRouteProp = RouteProp<JobsStackParamList, 'JobDetails'>;
 export type JobApplicationRouteProp = RouteProp<JobsStackParamList, 'JobApplication'>;

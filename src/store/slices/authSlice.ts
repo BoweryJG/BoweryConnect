@@ -4,61 +4,97 @@ import { AUTH_CONFIG } from '../../constants/config';
 
 interface AuthState {
   isAuthenticated: boolean;
-  phoneNumber: string | null;
+  username: string | null;
   token: string | null;
   userId: string | null;
   isLoading: boolean;
   error: string | null;
-  otpSent: boolean;
-  otpExpiry: Date | null;
 }
 
 const initialState: AuthState = {
   isAuthenticated: false,
-  phoneNumber: null,
+  username: null,
   token: null,
   userId: null,
   isLoading: false,
-  error: null,
-  otpSent: false,
-  otpExpiry: null
+  error: null
 };
 
-export const sendOTP = createAsyncThunk(
-  'auth/sendOTP',
-  async (phoneNumber: string) => {
-    // TODO: Implement actual API call
-    // For now, simulate OTP sending
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    return {
-      phoneNumber,
-      expiry: new Date(Date.now() + AUTH_CONFIG.OTP_EXPIRY_MINUTES * 60 * 1000)
-    };
-  }
-);
+// Generate a 6-digit access code
+const generateAccessCode = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
 
-export const verifyOTP = createAsyncThunk(
-  'auth/verifyOTP',
-  async ({ phoneNumber, otp }: { phoneNumber: string; otp: string }) => {
+export const register = createAsyncThunk(
+  'auth/register',
+  async (userData: { 
+    firstName: string; 
+    lastName: string; 
+    username: string; 
+    caseWorkerId?: string 
+  }) => {
     // TODO: Implement actual API call
-    // For now, simulate OTP verification
+    // For now, simulate registration
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Mock response
+    const accessCode = generateAccessCode();
     const mockToken = 'mock_jwt_token_' + Date.now();
     const mockUserId = 'user_' + Date.now();
     
-    // Store auth data
+    // Store user data and access code
+    await AsyncStorage.setItem(`user_${userData.username}`, JSON.stringify({
+      ...userData,
+      accessCode,
+      userId: mockUserId
+    }));
+    
+    // Store auth session
     await AsyncStorage.setItem(AUTH_CONFIG.SESSION_STORAGE_KEY, JSON.stringify({
       token: mockToken,
       userId: mockUserId,
-      phoneNumber
+      username: userData.username
     }));
     
     return {
       token: mockToken,
       userId: mockUserId,
-      phoneNumber
+      username: userData.username,
+      accessCode // Return access code to show to user
+    };
+  }
+);
+
+export const login = createAsyncThunk(
+  'auth/login',
+  async ({ username, accessCode }: { username: string; accessCode: string }) => {
+    // TODO: Implement actual API call
+    // For now, simulate login with local storage
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Check if user exists
+    const userDataStr = await AsyncStorage.getItem(`user_${username}`);
+    if (!userDataStr) {
+      throw new Error('Invalid username or access code');
+    }
+    
+    const userData = JSON.parse(userDataStr);
+    if (userData.accessCode !== accessCode) {
+      throw new Error('Invalid username or access code');
+    }
+    
+    const mockToken = 'mock_jwt_token_' + Date.now();
+    
+    // Store auth session
+    await AsyncStorage.setItem(AUTH_CONFIG.SESSION_STORAGE_KEY, JSON.stringify({
+      token: mockToken,
+      userId: userData.userId,
+      username
+    }));
+    
+    return {
+      token: mockToken,
+      userId: userData.userId,
+      username
     };
   }
 );
@@ -87,46 +123,41 @@ const authSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = null;
-    },
-    resetOTP: (state) => {
-      state.otpSent = false;
-      state.otpExpiry = null;
     }
   },
   extraReducers: (builder) => {
-    // Send OTP
-    builder.addCase(sendOTP.pending, (state) => {
+    // Register
+    builder.addCase(register.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(sendOTP.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.otpSent = true;
-      state.phoneNumber = action.payload.phoneNumber;
-      state.otpExpiry = action.payload.expiry.toISOString();
-    });
-    builder.addCase(sendOTP.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.error.message || 'Failed to send OTP';
-    });
-    
-    // Verify OTP
-    builder.addCase(verifyOTP.pending, (state) => {
-      state.isLoading = true;
-      state.error = null;
-    });
-    builder.addCase(verifyOTP.fulfilled, (state, action) => {
+    builder.addCase(register.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isAuthenticated = true;
       state.token = action.payload.token;
       state.userId = action.payload.userId;
-      state.phoneNumber = action.payload.phoneNumber;
-      state.otpSent = false;
-      state.otpExpiry = null;
+      state.username = action.payload.username;
     });
-    builder.addCase(verifyOTP.rejected, (state, action) => {
+    builder.addCase(register.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.error.message || 'Invalid OTP';
+      state.error = action.error.message || 'Registration failed';
+    });
+    
+    // Login
+    builder.addCase(login.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isAuthenticated = true;
+      state.token = action.payload.token;
+      state.userId = action.payload.userId;
+      state.username = action.payload.username;
+    });
+    builder.addCase(login.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.error.message || 'Login failed';
     });
     
     // Load stored auth
@@ -135,7 +166,7 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.token = action.payload.token;
         state.userId = action.payload.userId;
-        state.phoneNumber = action.payload.phoneNumber;
+        state.username = action.payload.username;
       }
     });
     
@@ -146,5 +177,5 @@ const authSlice = createSlice({
   }
 });
 
-export const { clearError, resetOTP } = authSlice.actions;
+export const { clearError } = authSlice.actions;
 export default authSlice.reducer;
