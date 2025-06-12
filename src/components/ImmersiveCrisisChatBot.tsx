@@ -13,6 +13,7 @@ import {
   Platform
 } from 'react-native';
 import { colors, spacing, typography, borderRadius } from '../constants/theme';
+import crisisApi from '../services/crisisApi';
 
 const { width, height } = Dimensions.get('window');
 
@@ -278,24 +279,47 @@ export default function ImmersiveCrisisChatBot() {
     setInputText('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      const response = generateResponse(userMessage.text);
+    try {
+      // Use real API
+      const apiResponse = await crisisApi.sendMessage(userMessage.text, messages);
+      
+      // Determine sensory mode based on urgency
+      let sensoryMode: 'breathing' | 'grounding' | 'heartbeat' | 'waves' = 'breathing';
+      let colorTheme: 'calming' | 'energizing' | 'grounding' | 'emergency' = 'calming';
+      
+      switch (apiResponse.urgency) {
+        case 'immediate':
+          sensoryMode = 'heartbeat';
+          colorTheme = 'emergency';
+          break;
+        case 'high':
+          sensoryMode = 'grounding';
+          colorTheme = 'grounding';
+          break;
+        case 'medium':
+          sensoryMode = 'breathing';
+          colorTheme = 'calming';
+          break;
+        default:
+          sensoryMode = 'waves';
+          colorTheme = 'calming';
+      }
       
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: response.message,
+        text: apiResponse.message,
         isBot: true,
         timestamp: new Date(),
-        colorTheme: response.colorTheme,
-        sensoryMode: response.sensoryMode
+        colorTheme,
+        sensoryMode
       };
 
       setMessages(prev => [...prev, botMessage]);
       setIsTyping(false);
-      setCurrentTheme(response.colorTheme);
+      setCurrentTheme(colorTheme);
 
       // Start appropriate sensory animation
-      switch (response.sensoryMode) {
+      switch (sensoryMode) {
         case 'breathing':
           startBreathingAnimation();
           break;
@@ -310,15 +334,32 @@ export default function ImmersiveCrisisChatBot() {
           break;
       }
 
-      // Trigger vibration pattern
-      if (response.vibrationPattern && Platform.OS !== 'web') {
-        Vibration.vibrate(response.vibrationPattern);
+      // Emergency vibration for immediate crisis
+      if (apiResponse.urgency === 'immediate' && Platform.OS !== 'web') {
+        Vibration.vibrate([100, 200, 100, 200, 100, 200]);
       }
 
       setTimeout(() => {
         scrollViewRef.current?.scrollToEnd({ animated: true });
       }, 100);
-    }, 2000);
+      
+    } catch (error) {
+      // Fallback to local response if API fails
+      const response = generateResponse(userMessage.text);
+      
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: response.message,
+        isBot: true,
+        timestamp: new Date(),
+        colorTheme: response.colorTheme,
+        sensoryMode: response.sensoryMode
+      };
+
+      setMessages(prev => [...prev, botMessage]);
+      setIsTyping(false);
+      setCurrentTheme(response.colorTheme);
+    }
   };
 
   const renderSensoryBackground = () => {

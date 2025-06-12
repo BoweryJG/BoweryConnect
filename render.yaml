@@ -1,0 +1,29 @@
+services:
+  # Backend API Service
+  - type: web
+    name: boweryconnect-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: OPENAI_API_KEY
+        sync: false # Add in Render dashboard
+      - key: PORT
+        value: 3000
+    healthCheckPath: /health
+
+  # Static site (if you want to host frontend on Render too)
+  - type: web
+    name: boweryconnect-web
+    runtime: static
+    buildCommand: npm install && npx expo export --platform web
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
