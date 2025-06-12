@@ -15,7 +15,6 @@ import {
   Dimensions,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import crisisApi from '../services/crisisApi';
 import { styles } from '../styles/EnhancedCrisisChatBotStyles';
@@ -106,6 +105,21 @@ const PEER_SUPPORTERS: PeerConnection[] = [
 // Web-compatible blur view
 const BlurView = ({ children, intensity, style }: any) => (
   <View style={[style, { backgroundColor: 'rgba(0, 0, 0, 0.8)' }]}>
+    {children}
+  </View>
+);
+
+// Web-compatible gradient component
+const LinearGradient = ({ colors, style, children }: any) => (
+  <View 
+    style={[
+      style, 
+      { 
+        backgroundColor: colors[0],
+        backgroundImage: `linear-gradient(to bottom, ${colors.join(', ')})`
+      }
+    ]}
+  >
     {children}
   </View>
 );
