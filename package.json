@@ -7,8 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "build:web": "expo export --platform web",
-    "netlify:build": "expo export --platform web"
+    "build:web": "expo export:web",
+    "netlify:build": "expo export:web"
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.4",
