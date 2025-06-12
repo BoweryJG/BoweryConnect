@@ -96,9 +96,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: typography.fontSize.xxxl,
-    fontWeight: typography.fontWeight.bold,
+    fontWeight: typography.fontWeight.medium,
     color: colors.text.primary,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
+    letterSpacing: 0.5
   },
   subtitle: {
     fontSize: typography.fontSize.lg,

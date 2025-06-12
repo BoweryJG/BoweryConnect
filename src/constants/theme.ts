@@ -1,5 +1,5 @@
 export const colors = {
-  primary: '#1E3A8A', // Deep blue - trust and stability
+  primary: '#2563EB', // Softer blue - trust and calm
   secondary: '#F59E0B', // Warm amber - hope and opportunity
   success: '#10B981', // Green - growth and achievement
   danger: '#EF4444', // Red - alerts and warnings
