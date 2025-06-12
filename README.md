@@ -1,117 +1,206 @@
-# BoweryConnect
+# BoweryConnect 🏙️💙
 
-A mobile-first professional networking and employment platform designed for individuals experiencing homelessness, with initial focus on those connected to the Bowery Mission in NYC.
+A revolutionary platform connecting NYC's homeless community with dignity, opportunities, and hope. More than an app - it's a lifeline for crisis support, creative expression, and genuine human connection.
 
-## Overview
+## 🌟 Live Platform
 
-BoweryConnect bridges the gap between homeless individuals seeking employment and inclusive employers. The app provides a dignified, accessible platform that addresses the unique challenges faced by this population.
+**Web App**: [https://boweryconnect-web.netlify.app](https://boweryconnect-web.netlify.app)  
+**Crisis API**: [https://boweryconnect-backend.onrender.com](https://boweryconnect-backend.onrender.com)
 
-## Key Features
+## 🎯 Mission
 
-- **Simplified Profile Creation**: Voice-to-text capability, flexible address options, skills-based profiles
-- **Smart Job Matching**: AI-powered matching based on skills, location-aware suggestions
-- **Support Network**: Direct connection to case workers, peer mentorship
-- **Resource Hub**: Interview prep, digital literacy tutorials, benefits calculator
-- **Offline-First Design**: Works with intermittent connectivity
+BoweryConnect treats homeless individuals as complete human beings with dreams, talents, and potential. We connect people to real resources, creative opportunities, and communities that see their worth beyond their circumstances.
 
-## Tech Stack
+## ✨ Revolutionary Features
 
-- **Frontend**: React Native with TypeScript (Expo)
-- **State Management**: Redux Toolkit
-- **Navigation**: React Navigation
-- **Offline Support**: React Native Offline + AsyncStorage
-- **Accessibility**: Voice input, high contrast UI, large touch targets
+### 🆘 AI-Powered Crisis Support (Industry First!)
+- **24/7 Specialized Chatbot**: Trained specifically for homeless mental health crises
+- **Multi-Language Support**: English, Spanish (Español), Mandarin (中文), Arabic (العربية), Russian (Русский)
+- **Voice Recognition**: Hands-free support when typing is difficult
+- **Offline Mode**: Cached crisis responses work without internet
+- **Emotion Detection**: Analyzes typing patterns to detect panic/distress
+- **Peer Support Network**: Connect with others who've survived the streets
 
-## Project Structure
+### 🏛️ Real NYC Resources (20+ Organizations)
+- **24/7 Drop-In Centers**: 
+  - Olivieri Center (257 W 30th St) - Never closes
+  - Urban Pathways - Multiple locations
+  - The Door - Youth services
+- **Creative Arts Programs**:
+  - The Door - Daily music, theater, visual arts
+  - NY Writers Coalition - Your story matters
+  - Project Renewal TOP - Healing through art
+- **Education & Skills**:
+  - NYPL - 92 locations with free classes
+  - Culinary training with job placement
+  - Computer literacy programs
+- **Culture Access**:
+  - NYC Culture Pass - 100+ museums free
+  - IDNYC museum memberships
+- **Technology**:
+  - LinkNYC - 1,800+ free WiFi kiosks
+  - Free device charging 24/7
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **React Native / Expo**: Cross-platform (iOS, Android, Web)
+- **TypeScript**: Type-safe, maintainable code
+- **Redux Toolkit**: Predictable state management
+- **Expo Router**: File-based navigation
+- **React Native Reanimated**: Smooth, calming animations
+
+### Backend (Crisis API)
+- **Node.js / Express**: Fast, scalable API
+- **OpenAI GPT-4**: Intelligent crisis responses
+- **Multi-Language AI**: Real-time translation
+- **Fallback System**: Works even without API keys
+
+### Infrastructure
+- **Netlify**: Frontend hosting with instant deploys
+- **Render**: Backend hosting with auto-scaling
+- **GitHub Actions**: CI/CD pipeline
+
+## 📁 Project Structure
 
 ```
-src/
-├── components/       # Reusable UI components
-├── screens/         # Screen components
-│   ├── auth/       # Authentication screens
-│   ├── onboarding/ # User onboarding flow
-│   ├── jobs/       # Job search and application
-│   ├── profile/    # User profile management
-│   └── resources/  # Support resources
-├── navigation/      # Navigation configuration
-├── store/          # Redux store and slices
-├── services/       # API and external services
-├── utils/          # Helper functions
-├── constants/      # App constants and config
-├── types/          # TypeScript type definitions
-└── hooks/          # Custom React hooks
+BoweryConnect/
+├── src/
+│   ├── components/          # UI Components
+│   │   ├── EnhancedCrisisChatBot.tsx  # AI crisis support
+│   │   └── ImmersiveCrisisChatBot.tsx # Sensory calming features
+│   ├── screens/            
+│   │   ├── main/           # Main app screens
+│   │   │   └── OpportunitiesHomeScreen.tsx
+│   │   └── resources/      # Resource listings
+│   │       └── ResourceCategoryScreen.tsx
+│   ├── data/               
+│   │   └── resourcesData.ts # 20+ NYC organizations
+│   ├── services/           
+│   │   └── crisisApi.ts    # Crisis chat service
+│   └── store/              # Redux state management
+
+BoweryConnect-Backend/
+├── server.js               # Express API server
+├── .env                    # Environment variables
+└── package.json           # Dependencies
 ```
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
-
-- Node.js (v14 or higher)
+- Node.js 16+
 - npm or yarn
-- Expo CLI
-- iOS Simulator (Mac) or Android Emulator
+- Expo CLI (`npm install -g expo-cli`)
 
-### Installation
+### Frontend Setup
 
-1. Clone the repository:
 ```bash
-cd bowery/BoweryConnect
-```
+# Clone repository
+git clone https://github.com/BoweryJG/BoweryConnect.git
+cd BoweryConnect
 
-2. Install dependencies:
-```bash
+# Install dependencies
 npm install
+
+# Start development server
+npm start
+
+# For web
+npm run web
+
+# Build for production
+npm run netlify:build
 ```
 
-3. Start the development server:
+### Backend Setup
+
 ```bash
+# Clone backend
+git clone https://github.com/BoweryJG/BoweryConnect-Backend.git
+cd BoweryConnect-Backend
+
+# Install dependencies
+npm install
+
+# Set environment variables
+echo "OPENAI_API_KEY=your_key_here" > .env
+
+# Start server
 npm start
 ```
 
-4. Run on your preferred platform:
-   - Press `i` for iOS
-   - Press `a` for Android
-   - Scan QR code with Expo Go app on your phone
+## 📱 Key Features Explained
 
-## Development
+### Crisis Support Chatbot
+- **Immediate Response**: Detects crisis keywords and responds instantly
+- **Grounding Exercises**: For panic attacks and psychosis
+- **Breathing Animations**: Visual calming techniques
+- **Resource Locator**: Finds nearest help based on location
+- **Peer Matching**: Connect with others who understand
 
-### Running Tests
-```bash
-npm test
-```
+### Resource Directory
+- **Real-Time Info**: Updated hours, services, requirements
+- **One-Tap Actions**: Call, get directions, share
+- **Save Favorites**: Quick access to your resources
+- **Offline Access**: Critical info cached locally
 
-### Linting
-```bash
-npm run lint
-```
+### Community Features
+- **Success Stories**: Read how others made it
+- **Event Calendar**: Free meals, services, activities  
+- **Peer Forums**: Safe space to connect
+- **Mentor Matching**: Learn from those who've been there
 
-### Type Checking
-```bash
-npm run typecheck
-```
+## 🤝 Contributing
 
-## Features in Development
+We welcome contributions that respect our community. Please ensure:
+- Use person-first language ("person experiencing homelessness")
+- Test with actual users when possible
+- Prioritize accessibility and offline functionality
+- Keep dignity at the center of all features
 
-- [ ] Complete authentication flow with OTP
-- [ ] User profile creation and management
-- [ ] Job search and filtering
-- [ ] Application tracking
-- [ ] Offline data sync
-- [ ] Voice-based navigation
-- [ ] Multi-language support (English, Spanish, Chinese)
+## 📊 Impact
 
-## Contributing
+- **24/7 Availability**: Crisis support never sleeps
+- **5 Languages**: Serving NYC's diverse population
+- **20+ Organizations**: Real resources, verified info
+- **Zero Barriers**: No sign-ups, no requirements
 
-This project is currently in active development. Please check with the maintainers before contributing.
+## 🆘 Emergency Resources
 
-## Partner Organizations
+**Crisis? Get Help Now:**
+- **Call 988**: Suicide & Crisis Lifeline
+- **Text HOME to 741741**: Crisis Text Line
+- **Call 1-888-NYC-WELL**: NYC Mental Health
 
-- **The Bowery Mission**: Primary partner providing user feedback and testing
+**Need Shelter Tonight?**
+- **Olivieri Center**: 257 W 30th St (24/7)
+- **Call 311**: For shelter placement
+- **The Bowery Mission**: 227 Bowery
 
-## License
+## 🙏 Acknowledgments
 
-This project is proprietary software. All rights reserved.
+Built with insights from:
+- The homeless community of NYC
+- Coalition for the Homeless
+- The Bowery Mission
+- Urban Pathways
+- The Door
+- NY Writers Coalition
+- Project Renewal
 
-## Contact
+## 📄 License
 
-For questions or support, please contact: support@boweryconnect.org
+MIT License - Free to use and improve
+
+## 💌 Contact
+
+- **Website**: [boweryconnect.org](https://boweryconnect-web.netlify.app)
+- **Crisis API**: [API Documentation](https://boweryconnect-backend.onrender.com)
+- **GitHub**: [@BoweryJG](https://github.com/BoweryJG)
+
+---
+
+*"You are not alone. You are not forgotten. You matter."*
+
+Built with ❤️ for NYC's homeless community
