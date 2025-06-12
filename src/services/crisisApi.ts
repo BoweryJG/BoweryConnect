@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Use environment variable or default to Render URL
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://boweryconnect-api.onrender.com';
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://boweryconnect-backend.onrender.com';
 
 interface Message {
   text: string;
