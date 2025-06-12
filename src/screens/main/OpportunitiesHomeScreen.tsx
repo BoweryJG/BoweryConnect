@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import { MainTabNavigationProp } from '../../navigation/types';
 import { colors, spacing, typography, borderRadius } from '../../constants/theme';
 import EnhancedCrisisChatBot from '../../components/EnhancedCrisisChatBot';
+import { Platform } from 'react-native';
 
 const { width } = Dimensions.get('window');
 
@@ -137,12 +138,12 @@ export default function OpportunitiesHomeScreen() {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 1000,
-        useNativeDriver: true,
+        useNativeDriver: Platform.OS !== 'web',
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
         duration: 1000,
-        useNativeDriver: true,
+        useNativeDriver: Platform.OS !== 'web',
       })
     ]).start();
 
@@ -161,12 +162,12 @@ export default function OpportunitiesHomeScreen() {
         Animated.timing(pulseAnim, {
           toValue: 1.1,
           duration: 1000,
-          useNativeDriver: true,
+          useNativeDriver: Platform.OS !== 'web',
         }),
         Animated.timing(pulseAnim, {
           toValue: 1,
           duration: 1000,
-          useNativeDriver: true,
+          useNativeDriver: Platform.OS !== 'web',
         }),
       ])
     ).start();

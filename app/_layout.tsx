@@ -3,24 +3,21 @@ import { Stack } from 'expo-router';
 import { Provider } from 'react-redux';
 import { store } from '../src/store';
 import { Platform } from 'react-native';
-import { NetworkProvider } from 'react-native-offline';
+
+// Conditionally import NetworkProvider only for native platforms
+let NetworkProvider: any = ({ children }: any) => children;
+if (Platform.OS !== 'web') {
+  NetworkProvider = require('react-native-offline').NetworkProvider;
+}
 
 export default function RootLayout() {
-  const content = (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
-    </Stack>
-  );
-
   return (
     <Provider store={store}>
-      {Platform.OS === 'web' ? (
-        content
-      ) : (
-        <NetworkProvider>
-          {content}
-        </NetworkProvider>
-      )}
+      <NetworkProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+        </Stack>
+      </NetworkProvider>
     </Provider>
   );
 }
