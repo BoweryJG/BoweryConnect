@@ -8,6 +8,7 @@ import SavedJobsScreen from '../screens/main/SavedJobsScreen';
 import ApplicationsScreen from '../screens/main/ApplicationsScreen';
 import ProfileNavigator from './ProfileNavigator';
 import ResourcesNavigator from './ResourcesNavigator';
+import OpportunitiesHomeScreen from '../screens/main/OpportunitiesHomeScreen';
 import { colors } from '../constants/theme';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -20,6 +21,9 @@ export default function MainNavigator() {
           let iconName: string;
           
           switch (route.name) {
+            case 'Opportunities':
+              iconName = focused ? 'heart' : 'heart-outline';
+              break;
             case 'Jobs':
               iconName = focused ? 'briefcase' : 'briefcase-outline';
               break;
@@ -29,11 +33,8 @@ export default function MainNavigator() {
             case 'Applications':
               iconName = focused ? 'document-text' : 'document-text-outline';
               break;
-            case 'Profile':
-              iconName = focused ? 'person' : 'person-outline';
-              break;
             case 'Resources':
-              iconName = focused ? 'book' : 'book-outline';
+              iconName = focused ? 'medical' : 'medical-outline';
               break;
             default:
               iconName = 'help-outline';
@@ -58,9 +59,14 @@ export default function MainNavigator() {
       })}
     >
       <Tab.Screen 
+        name="Opportunities" 
+        component={OpportunitiesHomeScreen}
+        options={{ tabBarLabel: 'Life' }}
+      />
+      <Tab.Screen 
         name="Jobs" 
         component={JobsNavigator}
-        options={{ tabBarLabel: 'Jobs' }}
+        options={{ tabBarLabel: 'Work' }}
       />
       <Tab.Screen 
         name="Saved" 
@@ -71,11 +77,6 @@ export default function MainNavigator() {
         name="Applications" 
         component={ApplicationsScreen}
         options={{ tabBarLabel: 'Applications' }}
-      />
-      <Tab.Screen 
-        name="Profile" 
-        component={ProfileNavigator}
-        options={{ tabBarLabel: 'Profile' }}
       />
       <Tab.Screen 
         name="Resources" 

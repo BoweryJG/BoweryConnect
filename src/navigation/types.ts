@@ -23,10 +23,10 @@ export type OnboardingStackParamList = {
 };
 
 export type MainTabParamList = {
+  Opportunities: undefined;
   Jobs: undefined;
   Saved: undefined;
   Applications: undefined;
-  Profile: undefined;
   Resources: undefined;
 };
 
