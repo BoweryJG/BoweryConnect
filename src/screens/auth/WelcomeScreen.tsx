@@ -6,11 +6,13 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { AuthStackNavigationProp } from '../../navigation/types';
 import { colors, spacing, typography, borderRadius } from '../../constants/theme';
+import WebNavbar from '../../components/WebNavbar';
 
 const { width } = Dimensions.get('window');
 
@@ -18,8 +20,10 @@ export default function WelcomeScreen() {
   const navigation = useNavigation<AuthStackNavigationProp>();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+    <>
+      <WebNavbar />
+      <SafeAreaView style={styles.container}>
+        <View style={[styles.content, Platform.OS === 'web' && { paddingTop: 64 }]}>
         <View style={styles.logoContainer}>
           <View style={styles.logoPlaceholder}>
             <Text style={styles.logoText}>BC</Text>
@@ -61,6 +65,7 @@ export default function WelcomeScreen() {
         </View>
       </View>
     </SafeAreaView>
+    </>
   );
 }
 
