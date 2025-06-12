@@ -28,6 +28,7 @@ export type MainTabParamList = {
   Saved: undefined;
   Applications: undefined;
   Resources: undefined;
+  ResourceCategory: { categoryId: string };
 };
 
 export type JobsStackParamList = {

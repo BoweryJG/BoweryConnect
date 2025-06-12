@@ -40,67 +40,67 @@ const opportunityCategories: OpportunityCategory[] = [
     stereotypeBreaker: 'Revolutionary mental health support designed specifically for street experiences'
   },
   {
+    id: 'friendship',
+    title: 'Friendship & Community',
+    subtitle: 'Connect with others who understand',
+    icon: '🤝',
+    color: '#10B981',
+    description: 'Safe spaces to meet people, build friendships, and find your community',
+    stereotypeBreaker: 'Real connections at drop-in centers like Olivieri Center - 24/7 community'
+  },
+  {
+    id: 'creative',
+    title: 'Creative Expression',
+    subtitle: 'Art, music, writing, theater',
+    icon: '🎨',
+    color: '#8B5CF6',
+    description: 'Free programs to express yourself through arts and creativity',
+    stereotypeBreaker: 'The Door offers daily arts programs, NY Writers Coalition welcomes all voices'
+  },
+  {
+    id: 'learning',
+    title: 'Learning & Growth',
+    subtitle: 'Education and skill building',
+    icon: '📚',
+    color: '#3B82F6',
+    description: 'Free classes, job training, and educational opportunities',
+    stereotypeBreaker: 'NYPL has 92 locations with free classes - no library card needed for many'
+  },
+  {
+    id: 'culture',
+    title: 'Culture & Museums',
+    subtitle: 'Free access to NYC culture',
+    icon: '🏛️',
+    color: '#F59E0B',
+    description: 'Museum passes, cultural events, and free entertainment',
+    stereotypeBreaker: 'Culture Pass gives you free access to 100+ museums with just a library card'
+  },
+  {
+    id: 'tech',
+    title: 'Technology Access',
+    subtitle: 'Computers, internet, and digital skills',
+    icon: '💻',
+    color: '#14B8A6',
+    description: 'Free computer access, WiFi, and technology training',
+    stereotypeBreaker: 'LinkNYC has 1,800+ kiosks with free WiFi and charging - available 24/7'
+  },
+  {
+    id: 'wellness',
+    title: 'Wellness & Self-Care',
+    subtitle: 'Physical and mental wellness',
+    icon: '🧘',
+    color: '#EC4899',
+    description: 'Free fitness, meditation, and wellness programs',
+    stereotypeBreaker: 'NYC Parks offers free yoga and fitness - wellness is not a luxury'
+  },
+  {
     id: 'mental-health',
     title: 'Mental Health & Recovery',
     subtitle: 'Healing your mind',
     icon: '🧠',
     color: '#7C3AED',
     description: 'Psychiatrists, therapists, and peer support groups',
-    stereotypeBreaker: 'Trauma-informed care that understands homelessness, addiction, and survival'
-  },
-  {
-    id: 'addiction',
-    title: 'Addiction Recovery',
-    subtitle: 'Breaking free together',
-    icon: '🌱',
-    color: '#059669',
-    description: 'Detox, rehab, NA/AA meetings, and sober living',
-    stereotypeBreaker: 'Harm reduction approach - meet you where you are, no judgment'
-  },
-  {
-    id: 'work',
-    title: 'Work & Career',
-    subtitle: 'Beyond survival jobs',
-    icon: '💼',
-    color: colors.primary,
-    description: 'Meaningful careers with growth potential',
-    stereotypeBreaker: 'From tech startups to creative agencies wanting diverse perspectives'
-  },
-  {
-    id: 'friendship',
-    title: 'Friendship & Community',
-    subtitle: 'Real human connections',
-    icon: '🤝',
-    color: '#22C55E',
-    description: 'Meet genuine people who see you as a person',
-    stereotypeBreaker: 'Young professionals, artists, entrepreneurs seeking authentic friendships'
-  },
-  {
-    id: 'creative',
-    title: 'Creative Expression',
-    subtitle: 'Your voice matters',
-    icon: '🎨',
-    color: '#F59E0B',
-    description: 'Art, music, writing, and creative collaborations',
-    stereotypeBreaker: 'Gallery showings, music venues, and creative spaces seeking authentic stories'
-  },
-  {
-    id: 'learning',
-    title: 'Learning & Growth',
-    subtitle: 'Expand your world',
-    icon: '📚',
-    color: '#3B82F6',
-    description: 'From coding bootcamps to cooking classes',
-    stereotypeBreaker: 'Universities, workshops, and skill-shares welcoming diverse backgrounds'
-  },
-  {
-    id: 'adventure',
-    title: 'Adventures & Experiences',
-    subtitle: 'Life is meant to be lived',
-    icon: '🌟',
-    color: '#EF4444',
-    description: 'Events, activities, and new experiences',
-    stereotypeBreaker: 'Rock climbing groups, book clubs, food tours - experiences beyond basic needs'
+    stereotypeBreaker: 'Project Renewal uses art therapy - healing through creativity'
   },
   {
     id: 'housing',
@@ -112,13 +112,13 @@ const opportunityCategories: OpportunityCategory[] = [
     stereotypeBreaker: 'Intentional communities, co-living spaces, and housing advocates'
   },
   {
-    id: 'basic-needs',
-    title: 'Essential Resources',
-    subtitle: 'Food, shower, safety',
-    icon: '🍽️',
-    color: '#DC2626',
-    description: 'Emergency shelter, food banks, hygiene facilities',
-    stereotypeBreaker: 'Dignified services that treat you as human, not charity case'
+    id: 'food',
+    title: 'Food with Dignity',
+    subtitle: 'More than just meals',
+    icon: '🍲',
+    color: '#F97316',
+    description: 'Restaurant-quality food and welcoming spaces',
+    stereotypeBreaker: 'Holy Apostles serves 1,000+ daily in a beautiful church - dignity matters'
   }
 ];
 
@@ -178,8 +178,9 @@ export default function OpportunitiesHomeScreen() {
       setShowCrisisBot(true);
       return;
     }
-    // TODO: Navigate to category-specific screen
-    console.log('Navigate to:', category.id);
+    
+    // Navigate to resource category screen for other categories
+    navigation.navigate('ResourceCategory', { categoryId: category.id });
   };
 
   const renderOpportunityCard = (category: OpportunityCategory, index: number) => {
