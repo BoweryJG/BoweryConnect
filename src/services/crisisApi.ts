@@ -7,6 +7,8 @@ interface Message {
   text: string;
   isBot: boolean;
   timestamp: Date;
+  emotion?: string;
+  language?: string;
 }
 
 interface CrisisResponse {
@@ -15,6 +17,21 @@ interface CrisisResponse {
   actions?: string[];
   resources?: string[];
   fallback?: boolean;
+  peerSupport?: boolean;
+  translation?: { [key: string]: string };
+}
+
+interface LocationData {
+  latitude: number;
+  longitude: number;
+}
+
+interface EnhancedContext {
+  language?: string;
+  emotion?: string;
+  location?: LocationData;
+  sessionId?: string;
+  mood?: 'stable' | 'anxious' | 'crisis';
 }
 
 interface NearbyResources {
@@ -38,12 +55,21 @@ class CrisisAPI {
 
   async sendMessage(
     message: string, 
-    conversationHistory: Message[] = []
+    conversationHistory: Message[] = [],
+    context?: EnhancedContext
   ): Promise<CrisisResponse> {
     try {
       const response = await this.axios.post<CrisisResponse>('/api/crisis-chat', {
         message,
-        conversationHistory: conversationHistory.slice(-10) // Last 10 messages for context
+        conversationHistory: conversationHistory.slice(-10), // Last 10 messages for context
+        context: {
+          language: context?.language || 'en',
+          emotion: context?.emotion,
+          location: context?.location,
+          sessionId: context?.sessionId,
+          mood: context?.mood,
+          timestamp: new Date().toISOString()
+        }
       });
       
       return response.data;

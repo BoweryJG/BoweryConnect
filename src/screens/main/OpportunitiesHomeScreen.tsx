@@ -14,7 +14,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { MainTabNavigationProp } from '../../navigation/types';
 import { colors, spacing, typography, borderRadius } from '../../constants/theme';
-import ImmersiveCrisisChatBot from '../../components/ImmersiveCrisisChatBot';
+import EnhancedCrisisChatBot from '../../components/EnhancedCrisisChatBot';
 
 const { width } = Dimensions.get('window');
 
@@ -396,7 +396,7 @@ export default function OpportunitiesHomeScreen() {
           >
             <Text style={styles.closeButtonText}>✕ Exit Sanctuary</Text>
           </TouchableOpacity>
-          <ImmersiveCrisisChatBot />
+          <EnhancedCrisisChatBot onClose={() => setShowCrisisBot(false)} />
         </View>
       </Modal>
     </View>
