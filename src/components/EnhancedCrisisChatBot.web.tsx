@@ -8,39 +8,17 @@ import {
   KeyboardAvoidingView,
   Platform,
   Animated,
-  Vibration,
   Alert,
   ActivityIndicator,
   Modal,
   FlatList,
   Dimensions,
 } from 'react-native';
-import * as Speech from 'expo-speech';
-import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Audio } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import crisisApi from '../services/crisisApi';
 import { styles } from '../styles/EnhancedCrisisChatBotStyles';
-
-// Conditional import for BlurView
-let BlurView: any;
-if (Platform.OS !== 'web') {
-  try {
-    BlurView = require('expo-blur').BlurView;
-  } catch {
-    // Fallback for platforms without blur support
-    BlurView = View;
-  }
-} else {
-  // Web fallback
-  BlurView = ({ children, style }: any) => (
-    <View style={[style, { backgroundColor: 'rgba(0, 0, 0, 0.8)' }]}>
-      {children}
-    </View>
-  );
-}
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -73,13 +51,6 @@ const LANGUAGES = [
   { code: 'zh', name: '中文', flag: '🇨🇳' },
   { code: 'ar', name: 'العربية', flag: '🇸🇦' },
   { code: 'ru', name: 'Русский', flag: '🇷🇺' },
-];
-
-const NATURE_SOUNDS = [
-  { id: 'rain', name: 'Rain', icon: '🌧️', file: 'rain.mp3' },
-  { id: 'ocean', name: 'Ocean', icon: '🌊', file: 'ocean.mp3' },
-  { id: 'forest', name: 'Forest', icon: '🌲', file: 'forest.mp3' },
-  { id: 'silence', name: 'Silence', icon: '🔇', file: null },
 ];
 
 // Offline crisis responses cache
@@ -132,14 +103,18 @@ const PEER_SUPPORTERS: PeerConnection[] = [
   },
 ];
 
+// Web-compatible blur view
+const BlurView = ({ children, intensity, style }: any) => (
+  <View style={[style, { backgroundColor: 'rgba(0, 0, 0, 0.8)' }]}>
+    {children}
+  </View>
+);
+
 export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [isListening, setIsListening] = useState(false);
-  const [backgroundSound, setBackgroundSound] = useState<Audio.Sound | null>(null);
-  const [selectedSound, setSelectedSound] = useState('silence');
   const [showPeerSupport, setShowPeerSupport] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState<number[]>([]);
@@ -149,18 +124,12 @@ export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void
   
   const scrollViewRef = useRef<ScrollView>(null);
   const pulseAnim = useRef(new Animated.Value(1)).current;
-  const typingTimer = useRef<NodeJS.Timeout>();
   const lastTypeTime = useRef<number>(Date.now());
 
   useEffect(() => {
     initializeSession();
     checkNetworkStatus();
     loadUserPreferences();
-    return () => {
-      if (backgroundSound) {
-        backgroundSound.unloadAsync();
-      }
-    };
   }, []);
 
   const initializeSession = async () => {
@@ -195,11 +164,8 @@ export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void
     try {
       const prefs = await AsyncStorage.getItem('userPreferences');
       if (prefs) {
-        const { language, soundPreference } = JSON.parse(prefs);
+        const { language } = JSON.parse(prefs);
         setSelectedLanguage(language || 'en');
-        if (soundPreference && soundPreference !== 'silence') {
-          playBackgroundSound(soundPreference);
-        }
       }
     } catch (error) {
       console.error('Error loading preferences:', error);
@@ -255,56 +221,6 @@ export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void
     }
   };
 
-  const playBackgroundSound = async (soundId: string) => {
-    try {
-      if (backgroundSound) {
-        await backgroundSound.unloadAsync();
-      }
-      
-      const sound = NATURE_SOUNDS.find(s => s.id === soundId);
-      if (sound && sound.file) {
-        const { sound: newSound } = await Audio.Sound.createAsync(
-          { uri: `../../assets/sounds/${sound.file}` },
-          { isLooping: true, volume: 0.3 }
-        );
-        setBackgroundSound(newSound);
-        await newSound.playAsync();
-        setSelectedSound(soundId);
-      }
-    } catch (error) {
-      console.error('Error playing sound:', error);
-    }
-  };
-
-  const startVoiceRecognition = async () => {
-    try {
-      setIsListening(true);
-      // In a real app, implement voice recognition here
-      // For now, simulate with a timeout
-      setTimeout(() => {
-        setInputText("I need help");
-        setIsListening(false);
-        handleSend();
-      }, 3000);
-    } catch (error) {
-      console.error('Voice recognition error:', error);
-      setIsListening(false);
-    }
-  };
-
-  const speakMessage = (text: string) => {
-    const voice = selectedLanguage === 'es' ? 'es-ES' : 
-                  selectedLanguage === 'zh' ? 'zh-CN' :
-                  selectedLanguage === 'ar' ? 'ar-SA' :
-                  selectedLanguage === 'ru' ? 'ru-RU' : 'en-US';
-    
-    Speech.speak(text, {
-      language: voice,
-      rate: 0.9,
-      pitch: 0.95,
-    });
-  };
-
   const translateMessage = async (text: string, targetLang: string): Promise<string> => {
     // In production, use a translation API
     // For now, return key translations
@@ -342,7 +258,6 @@ export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void
       timestamp: new Date(),
       emotion: detectEmotion(inputText, typingSpeed),
       language: selectedLanguage,
-      isVoice: isListening
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -361,25 +276,12 @@ export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void
           fallback: true
         };
       } else {
-        // Get location for resource recommendations
-        let location = null;
-        try {
-          const { status } = await Location.requestForegroundPermissionsAsync();
-          if (status === 'granted') {
-            location = await Location.getCurrentPositionAsync({});
-          }
-        } catch {}
-        
         response = await crisisApi.sendMessage(
           userMessage.text,
           messages,
           {
             language: selectedLanguage,
             emotion: userMessage.emotion,
-            location: location ? {
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude
-            } : undefined,
             sessionId,
             mood: userMood
           }
@@ -402,16 +304,6 @@ export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void
       };
 
       setMessages(prev => [...prev, botMessage]);
-      
-      // Speak the response
-      if (userMessage.isVoice) {
-        speakMessage(botText);
-      }
-
-      // Vibrate for urgent messages
-      if (response.urgency === 'immediate' || response.urgency === 'high') {
-        Vibration.vibrate([0, 200, 100, 200]);
-      }
 
       // Save session after each exchange
       await saveSession();
@@ -464,9 +356,6 @@ export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void
       item.isBot ? styles.botMessage : styles.userMessage,
       { opacity: item.isBot && item.text.includes('🤝') ? pulseAnim : 1 }
     ]}>
-      {item.isVoice && (
-        <Ionicons name="mic" size={16} color={item.isBot ? '#fff' : '#333'} style={{ marginRight: 8 }} />
-      )}
       <Text style={[
         styles.messageText,
         item.isBot ? styles.botMessageText : styles.userMessageText
@@ -507,8 +396,7 @@ export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void
                 onPress={() => {
                   setSelectedLanguage(lang.code);
                   AsyncStorage.setItem('userPreferences', JSON.stringify({
-                    language: lang.code,
-                    soundPreference: selectedSound
+                    language: lang.code
                   }));
                 }}
               >
@@ -516,24 +404,6 @@ export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void
               </TouchableOpacity>
             ))}
           </ScrollView>
-
-          {/* Background Sounds */}
-          <Text style={[styles.settingLabel, { marginTop: 20 }]}>Calming Sounds</Text>
-          <View style={styles.soundGrid}>
-            {NATURE_SOUNDS.map(sound => (
-              <TouchableOpacity
-                key={sound.id}
-                style={[
-                  styles.soundButton,
-                  selectedSound === sound.id && styles.selectedSound
-                ]}
-                onPress={() => playBackgroundSound(sound.id)}
-              >
-                <Text style={styles.soundIcon}>{sound.icon}</Text>
-                <Text style={styles.soundName}>{sound.name}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
 
           <TouchableOpacity
             style={styles.closeButton}
@@ -659,7 +529,7 @@ export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void
             <View style={styles.welcomeContainer}>
               <Text style={styles.welcomeText}>
                 I'm here for you, no judgment. What's going on? 
-                {'\n\n'}You can type, use voice 🎤, or connect with a peer who's been there.
+                {'\n\n'}You can type or connect with a peer who's been there.
               </Text>
             </View>
           )}
@@ -693,20 +563,7 @@ export default function EnhancedCrisisChatBot({ onClose }: { onClose: () => void
             placeholderTextColor="#94A3B8"
             multiline
             maxHeight={100}
-            editable={!isListening}
           />
-          
-          <TouchableOpacity
-            style={[styles.voiceButton, isListening && styles.voiceButtonActive]}
-            onPress={startVoiceRecognition}
-            disabled={isListening}
-          >
-            <Ionicons 
-              name={isListening ? "mic" : "mic-outline"} 
-              size={24} 
-              color={isListening ? "#EF4444" : "#fff"} 
-            />
-          </TouchableOpacity>
           
           <TouchableOpacity
             style={[styles.sendButton, (!inputText.trim() || isLoading) && styles.sendButtonDisabled]}
