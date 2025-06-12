@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import RootNavigator from '../src/navigation/RootNavigator';
+import MainNavigator from '../src/navigation/MainNavigator';
 import { useAppDispatch } from '../src/store';
 import { loadOfflineData } from '../src/store/slices/offlineSlice';
 import { loadSavedData } from '../src/store/slices/jobsSlice';
@@ -16,7 +16,7 @@ export default function Index() {
   return (
     <>
       <StatusBar style="auto" />
-      <RootNavigator />
+      <MainNavigator />
     </>
   );
 }
