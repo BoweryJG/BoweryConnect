@@ -11,30 +11,32 @@ export const webSafeAnimation = (config: any) => ({
 
 // CSS-based animations for web
 export const webAnimationStyles = Platform.OS === 'web' ? {
-  pulse: {
-    animationName: 'pulse',
-    animationDuration: '2s',
+  gentlePulse: {
+    animationName: 'gentlePulse',
+    animationDuration: '3s',
     animationIterationCount: 'infinite',
     animationTimingFunction: 'ease-in-out',
   },
   fadeIn: {
     animationName: 'fadeIn',
-    animationDuration: '1s',
+    animationDuration: '1.5s',
     animationFillMode: 'forwards',
+    animationTimingFunction: 'ease-out',
   },
   slideUp: {
     animationName: 'slideUp',
-    animationDuration: '1s',
+    animationDuration: '1.2s',
     animationFillMode: 'forwards',
+    animationTimingFunction: 'ease-out',
   }
 } : {};
 
 // Global CSS for web animations
 export const webAnimationCSS = Platform.OS === 'web' ? `
-  @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+  @keyframes gentlePulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
   }
   
   @keyframes fadeIn {
@@ -43,7 +45,7 @@ export const webAnimationCSS = Platform.OS === 'web' ? `
   }
   
   @keyframes slideUp {
-    from { transform: translateY(50px); opacity: 0; }
+    from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
   }
 ` : '';
